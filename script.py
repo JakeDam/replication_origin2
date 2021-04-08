@@ -26,7 +26,25 @@ def minimum_skew(genome):
         elif skew_array[i] == min_skew:
             min_skews.append(i)
     return min_skews
+    
+# Calculates hamming distance between two nucleotide sequences 
+def hamming_dist(seqA, seqB):
+    h_dist = 0 
+    for i in range(0, len(seqA)):
+        if seqA[i] != seqB[i]:
+            h_dist += 1
+    return h_dist
 
-genome = open('/home/jakedam/ucsd-bioinformatics/bioinformatics-I/week2/replication_origin2/datasets/dataset_7_10.txt').read()
+# Determines the amount of approximate matches of a pattern to a given genome
+def approximate_match(pattern, genome, d):
+    positions = []
+    for i in range(0, len(genome) - len(pattern) + 1):
+        subset = genome[i:i + len(pattern)]
+        mismatches = 0
+        for j in range(0, len(subset)):
+            if subset[j] != pattern[j]:
+                mismatches += 1
+        if mismatches <= d:
+            positions.append(i)
+    return positions
 
-print(minimum_skew(genome))
