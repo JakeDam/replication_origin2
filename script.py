@@ -60,3 +60,22 @@ def approximate_pattern_count(pattern, genome, d):
         if mismatches <= d:
             count += 1
     return count
+
+# Generates the d-neighborhood (set of all k-mers whose hamming distance from the pattern does not exceed a certian amount)
+def neighbors(pattern):
+    neighborhood = set()
+    for i in range(1, len(pattern)):
+        symbol = pattern[i]
+        for nucleotide in 'ATCG':
+            neighbor = pattern[:i] + nucleotide + pattern[i+1:]
+            neighborhood.add(neighbor)
+    return neighborhood
+
+# Returns all of the approximate matches of a pattern to a given genome
+def freq_words_with_mismatches(genome, k, d):
+    patterns = []
+    freq_dict = {}
+    length = len(genome)
+    for i in range(0, length - k + 1):
+        neighborhood = neighbors(pattern)
+
