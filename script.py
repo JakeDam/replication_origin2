@@ -13,7 +13,7 @@ def skew(genome):
             skews.append(skew)
     return skews
 
-# Determines the minimum skew values from a given genome
+# Determines the locations of minimum skew values from a given genome
 def minimum_skew(genome):
     skew_array = skew(genome)
     min_skew = 0
@@ -35,7 +35,7 @@ def hamming_dist(seqA, seqB):
             h_dist += 1
     return h_dist
 
-# Determines the amount of approximate matches of a pattern to a given genome
+# Determines the location of approximate matches of a pattern to a given genome
 def approximate_match(pattern, genome, d):
     positions = []
     for i in range(0, len(genome) - len(pattern) + 1):
@@ -48,3 +48,15 @@ def approximate_match(pattern, genome, d):
             positions.append(i)
     return positions
 
+# Determines the number of matches or near matches of a pattern to a given genome
+def approximate_pattern_count(pattern, genome, d):
+    count = 0
+    for i in range(0, len(genome) - len(pattern) + 1):
+        subset = genome[i:i + len(pattern)]
+        mismatches = 0
+        for j in range(0, len(subset)):
+            if subset[j] != pattern[j]:
+                mismatches += 1
+        if mismatches <= d:
+            count += 1
+    return count
