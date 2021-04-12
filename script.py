@@ -77,15 +77,30 @@ def neighbors(pattern, d):
             neighborhood.add(pattern[0] + text)
     return neighborhood
 
+# Returns the largest value from a dictionary 
+def max_map(dict):
+    return max(dict.values())
 
 # Returns all of the approximate matches of a pattern to a given genome
 def freq_words_with_mismatches(genome, k, d):
     patterns = []
     freq_dict = {}
     length = len(genome)
-    for i in range(0, length - k + 1):
-        neighborhood = neighbors(pattern)
+    for i in range(0, length - k):
+        pattern = genome[i:k]
+        neighborhood = neighbors(pattern, d)
+        print(neighborhood)
+        for neighbor in neighborhood:
+            if neighbor not in freq_dict:
+                freq_dict[neighbor] = 1
+            else:
+                freq_dict[neighbor] += 1
+    m = max_map(freq_dict)
+    for key in freq_dict:
+        if freq_dict[key] == m:
+            patterns.append(key)
+    return patterns
 
 
-print(*neighbors('ATTGGTTGT', 3))
+
 
