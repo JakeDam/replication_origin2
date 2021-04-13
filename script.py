@@ -64,7 +64,7 @@ def approximate_pattern_count(pattern, genome, d):
 # Generates the d-neighborhood (set of all k-mers whose hamming distance from the pattern does not exceed d)
 def neighbors(pattern, d):
     if d == 0:
-        return set(pattern)
+        return set((pattern))
     if len(pattern) == 1:
         return set(('A', 'T', 'C', 'G'))
     neighborhood = set()
@@ -77,6 +77,27 @@ def neighbors(pattern, d):
             neighborhood.add(pattern[0] + text)
     return neighborhood
 
+# Generates the d=1 neighborhood for a given sequence
+def immediate_neighbors(pattern):
+    neighborhood = set()
+    for i in range(len(pattern)):
+        symbol = pattern[i]
+        for x in "ACTG":
+            if x != symbol:
+                neighbor = pattern[:i] + x + pattern[i+1:]
+                neighborhood.add(neighbor)
+    return neighborhood
+
+# Iterative version of neighbors
+def iter_neighbors(pattern, d):
+    neighborhood = set((pattern))
+    for j in range(1, d + 1):
+        for text in neighborhood:
+            temp_set = set()
+            temp_set.add(immediate_neighbors(text))
+        neighborhood.add(temp_set)
+    return neighborhood
+
 # Returns the largest value from a dictionary 
 def max_map(dict):
     return max(dict.values())
@@ -86,10 +107,9 @@ def freq_words_with_mismatches(genome, k, d):
     patterns = []
     freq_dict = {}
     length = len(genome)
-    for i in range(0, length - k):
+    for i in range(0, length - k + 1):
         pattern = genome[i:k]
-        neighborhood = neighbors(pattern, d)
-        print(neighborhood)
+        neighborhood = iter_neighbors(pattern, d)
         for neighbor in neighborhood:
             if neighbor not in freq_dict:
                 freq_dict[neighbor] = 1
@@ -102,5 +122,4 @@ def freq_words_with_mismatches(genome, k, d):
     return patterns
 
 
-
-
+print(iter_neighbors('ACGTTGCATGTCGCATGATGCATGAGAGCT', 1))
